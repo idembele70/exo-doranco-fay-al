@@ -1,0 +1,72 @@
+#Creation Database
+CREATE DATABASE ex2
+
+#Emploie BSD
+USE ex2
+
+#Creation Table 
+CREATE TABLE Departement (
+dno INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+dname VARCHAR(100), 
+location VARCHAR(100)
+);
+
+#Creation Table
+CREATE TABLE Employe (
+eno INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+enom VARCHAR(100), 
+prof VARCHAR(100), 
+dateemb DATE, 
+sal INT, 
+comm INT, 
+dno INT,
+CONSTRAINT Departement_fk FOREIGN KEY(dno) REFERENCES Departement(dno)
+);
+
+#Ajouter des donnes
+INSERT INTO Departement (dno, dname, location) VALUES
+(1, 'Ressources Humaines', 'Bâtiment A'),
+(2, 'Développement', 'Bâtiment B'),
+(3, 'Marketing', 'Bâtiment C'),
+(4, 'Ventes', 'Bâtiment D'),
+(5, 'Support Technique', 'Bâtiment E');
+
+#Ajouter des donnes
+INSERT INTO Employe (eno, enom, prof, dateemb, sal, comm, dno) VALUES
+(1, 'Martin', 'Comptable', '2019-01-15', 2500, NULL, 1),
+(2, 'Julie', 'Ingénieur', '2020-02-20', 3000, 500, 2),
+(3, 'Lucas', 'Technicien', '2018-03-25', 1500, NULL, 1),
+(4, 'Sophie', 'Directeur', '2017-04-30', 4500, 1000, 3),
+(5, 'Alex', 'Analyste', '2021-05-05', 3500, NULL, 2),
+(6, 'Emma', 'Secrétaire', '2019-06-10', 2000, 300, 1),
+(7, 'Hugo', 'Ingénieur', '2020-07-15', 3000, NULL, 2),
+(8, 'Ines', 'Comptable', '2018-08-20', 2500, 400, 1),
+(9, 'Leo', 'Technicien', '2022-09-25', 1800, NULL, 3),
+(10, 'Zoe', 'Directeur', '2021-10-30', 4700, 1500, 3);
+
+#Donnez la liste des employés ayant une commission
+SELECT * FROM Employe WHERE comm IS NOT NULL;
+
+#. Donnez la liste des employés qui ont comme salaire (1500,2500,3000)
+SELECT * FROM Employe WHERE sal = 1500 OR sal = 2500 OR sal = 3000;
+
+#Trouvez le salaire moyen des employés par profession
+SELECT prof, AVG(sal) FROM Employe GROUP BY prof; 
+
+#Sélectionnez le nom des employés qui ont été embauchés après le 1er janvier 2020
+SELECT * FROM Employe WHERE dateemb >= "2020-01-01";
+
+#Identifiez les employés qui n'ont pas de commission et dont le salaire est supérieur à 2000
+SELECT * FROM Employe WHERE comm IS NULL AND sal >= 2000;
+
+#Comptez le nombre d'employés dans chaque département
+SELECT prof, COUNT(*) FROM Employe GROUP BY prof;
+
+#Trouvez les employés qui ont le salaire le plus élevé dans chaque profession
+SELECT prof, MAX(sal) FROM Employe GROUP BY prof;
+
+#Sélectionnez les employés qui ont un nom commençant par la lettre 'L'
+SELECT * FROM Employe WHERE enom LIKE "L%";
+
+#Mettez à jour la commission pour les employés ayant un salaire inférieur à 2500, en leur donnant une commission de 500
+UPDATE Employe SET comm = 500 WHERE sal < 2500;
